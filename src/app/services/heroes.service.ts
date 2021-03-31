@@ -34,4 +34,29 @@ export class HeroesService {
 
     return this.http.put(`${this.url}/heroes/${heroe.id}.json`, heroTemp);
   }
+
+  getHeroes(){
+    return this.http.get(`${this.url}/heroes.json`)
+      .pipe(
+        map(
+          this.crearArreglo    //es otra forma de implementar la linea comentada
+          //resp => {this.crearArreglo(resp)}
+        )
+      );
+  }
+
+  private crearArreglo(heroesObj: object){
+
+    const heroes: HeroeModel[] = [];
+    if(heroesObj === null){ return [];}//validacion en caso de que este vacio
+    Object.keys(heroesObj).forEach( key => {
+      const heroe: HeroeModel = heroesObj[key];
+      heroe.id =  key;
+      heroes.push(heroe);
+
+    });
+
+
+   return  heroes;
+  }
 }
